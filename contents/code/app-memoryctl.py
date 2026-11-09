@@ -16,6 +16,10 @@ from app_memory_backend import (
 )
 
 UNIT_NAME = "app-memory-bar.service"
+SYSTEM_UNIT_PATHS = (
+    pathlib.Path("/usr/lib/systemd/user") / UNIT_NAME,
+    pathlib.Path("/lib/systemd/user") / UNIT_NAME,
+)
 
 
 def unit_path() -> pathlib.Path:
@@ -26,6 +30,13 @@ def unit_path() -> pathlib.Path:
 
 def daemon_path() -> pathlib.Path:
     return pathlib.Path(__file__).resolve().with_name("app-memory-daemon.py")
+
+
+def packaged_unit_path() -> pathlib.Path | None:
+    for path in SYSTEM_UNIT_PATHS:
+        if path.is_file():
+            return path
+    return None
 
 
 def systemd_quote(value: str) -> str:
@@ -60,30 +71,36 @@ def state_fresh(max_age: float = 12.0) -> bool:
 
 def ensure_service(wait: bool = True) -> tuple[bool, str]:
     path = unit_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    wanted = desired_unit()
-    try:
-        current = path.read_text() if path.exists() else ""
-    except OSError:
-        current = ""
-    changed = current != wanted
-    if changed:
-        path.write_text(wanted)
-        cp = run_systemctl("daemon-reload")
-        if cp.returncode != 0:
-            return False, (cp.stderr or cp.stdout).strip()
+    packaged = packaged_unit_path()
+    changed = False
+
+    if packaged is None:
+        # Standalone .plasmoid installs have no packaged user unit, so keep the
+        # historical self-contained behaviour and create one in XDG_CONFIG_HOME.
+        path.parent.mkdir(parents=True, exist_ok=True)
+        wanted = desired_unit()
+        try:
+            current = path.read_text() if path.exists() else ""
+        except OSError:
+            current = ""
+        changed = current != wanted
+        if changed:
+            path.write_text(wanted)
+            cp = run_systemctl("daemon-reload")
+            if cp.returncode != 0:
+                return False, (cp.stderr or cp.stdout).strip()
+    elif path.exists() or path.is_symlink():
+        # A per-user unit has higher precedence than /usr/lib/systemd/user. Do
+        # not silently overwrite/remove user data from the widget process. The
+        # packaged migration helper backs it up first.
+        return False, f"per-user unit shadows packaged service: {path}; run app-memory-bar-migrate --migrate"
 
     state = load_state()
     version_changed = bool(state.get("backendVersion")) and state.get("backendVersion") != BACKEND_VERSION
-    if not state_fresh() or changed:
-        # A running Python daemon keeps the old module in memory after the
-        # plasmoid package is upgraded.  A backend-version mismatch therefore
-        # requires restart, not a no-op `systemctl start` on an active unit.
+    if not state_fresh() or changed or version_changed:
         action = "restart" if changed or version_changed else "start"
         cp = run_systemctl(action, UNIT_NAME)
         if cp.returncode != 0:
-            # First install may not be enabled yet; enable --now is also our
-            # persistence across plasmashell restarts and future logins.
             cp = run_systemctl("enable", "--now", UNIT_NAME)
         else:
             run_systemctl("enable", UNIT_NAME)

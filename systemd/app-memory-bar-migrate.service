@@ -1,0 +1,10 @@
+[Unit]
+Description=Migrate App Memory Bar from per-user installation
+Before=app-memory-bar.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/app-memory-bar-migrate --automatic
+
+[Install]
+WantedBy=default.target

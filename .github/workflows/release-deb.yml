@@ -1,0 +1,114 @@
+name: release-deb
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-deb-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  debian-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release tag and metadata version
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z][0-9A-Za-z.-]*)?$ ]] || {
+            echo "unsupported release tag: $tag" >&2
+            exit 1
+          }
+          version="${tag#v}"
+          meta="$(python3 -c 'import json; print(json.load(open("metadata.json"))["KPlugin"]["Version"])')"
+          test "$meta" = "$version" || {
+            echo "metadata version $meta != tag $version" >&2
+            exit 1
+          }
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Install Debian build and QA tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends debhelper dpkg-dev lintian
+
+      - name: Build Debian package
+        shell: bash
+        run: |
+          set -euo pipefail
+          deb="$(./scripts/build-deb.sh "$VERSION")"
+          test -f "$deb"
+          changes="$(find .tmp/deb-build -maxdepth 1 -type f -name 'plasma-widget-app-memory-bar_*.changes' -print -quit)"
+          test -n "$changes" && test -f "$changes"
+          echo "DEB=$deb" >> "$GITHUB_ENV"
+          echo "CHANGES=$changes" >> "$GITHUB_ENV"
+          echo "LINTIAN_LOG=.tmp/deb-build/lintian.log" >> "$GITHUB_ENV"
+
+      - name: Verify Debian package
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(dpkg-deb -f "$DEB" Package)" = "plasma-widget-app-memory-bar"
+          test "$(dpkg-deb -f "$DEB" Version)" = "$VERSION"
+          test "$(dpkg-deb -f "$DEB" Architecture)" = "all"
+          dpkg-deb -c "$DEB" | grep -F './usr/share/plasma/plasmoids/cz.pitriss.appmemorybar/metadata.json'
+          dpkg-deb -c "$DEB" | grep -F './usr/share/plasma/plasmoids/cz.pitriss.appmemorybar/contents/ui/main.qml'
+          dpkg-deb -c "$DEB" | grep -F './usr/bin/app-memory-bar-migrate'
+          dpkg-deb -c "$DEB" | grep -F './usr/share/man/man1/app-memory-bar-migrate.1.gz'
+          dpkg-deb -c "$DEB" | grep -F './usr/lib/systemd/user/app-memory-bar.service'
+          dpkg-deb -c "$DEB" | grep -F './usr/lib/systemd/user/app-memory-bar-migrate.service'
+
+      - name: Run Lintian
+        shell: bash
+        run: |
+          set -euo pipefail
+          lintian --display-info --fail-on error,warning "$CHANGES" 2>&1 | tee "$LINTIAN_LOG"
+
+      - name: Upload Lintian log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lintian-${{ env.VERSION }}
+          path: ${{ env.LINTIAN_LOG }}
+          if-no-files-found: ignore
+
+      - name: Upload Debian CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plasma-widget-app-memory-bar-${{ env.VERSION }}
+          path: ${{ env.DEB }}
+          if-no-files-found: error
+
+      - name: Wait for GitHub Release created by helper
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for _ in $(seq 1 30); do
+            if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Release $GITHUB_REF_NAME was not created within 60 seconds" >&2
+          exit 1
+
+      - name: Attach Debian package to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release upload "$GITHUB_REF_NAME" "$DEB" --clobber

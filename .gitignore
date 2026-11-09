@@ -1,6 +1,5 @@
 /dist/
 /.tmp/
 /.log/
-*.plasmoid
 __pycache__/
 *.py[cod]

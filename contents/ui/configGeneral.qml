@@ -97,9 +97,6 @@ QQC2.ScrollView {
         syncRunner.run("appearance")
     }
 
-    function syncGeometry() {
-        syncRunner.run("geometry")
-    }
 
     Kirigami.FormLayout {
         id: form
@@ -334,19 +331,12 @@ QQC2.ScrollView {
                 onClicked: page.syncAppearance()
             }
 
-            QQC2.Button {
-                Layout.fillWidth: true
-                icon.name: "transform-scale"
-                text: i18n("Synchronizovat rozměry")
-                enabled: !page.syncBusy
-                onClicked: page.syncGeometry()
-            }
         }
 
         QQC2.Label {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: i18n("Vzhled se kopíruje z aktuálně aplikovaného vzhledu této instance. Pokud jsi něco změnil v konfiguraci, nejprve stiskni Použít. Rozměry kopírují skutečnou aktuální šířku a výšku tohoto widgetu na ostatní instance na ploše; jejich pozice se nemění.")
+            text: i18n("Vzhled se kopíruje z aktuálně aplikovaného vzhledu této instance. Pokud jsi něco změnil v konfiguraci, nejprve stiskni Použít.")
             opacity: 0.76
         }
 
@@ -399,13 +389,6 @@ QQC2.ScrollView {
             const fields = stdout.split("\t")
             if (fields[0] === "OK" && fields[1] === "appearance") {
                 page.syncStatus = i18np("Vzhled byl synchronizován do %1 další instance.", "Vzhled byl synchronizován do %1 dalších instancí.", Number(fields[2]))
-            } else if (fields[0] === "OK" && fields[1] === "geometry") {
-                const changed = Number(fields[2])
-                const failed = Number(fields[3])
-                const size = fields.length > 4 ? fields[4] : "?"
-                page.syncStatus = failed > 0
-                    ? i18n("Rozměr %1 byl nastaven u %2 instancí; %3 instancí změnu odmítlo.", size, changed, failed)
-                    : i18np("Rozměr %2 byl synchronizován do %1 další instance.", "Rozměr %2 byl synchronizován do %1 dalších instancí.", changed, size)
             } else {
                 page.syncStatus = stderr.length > 0 ? stderr : (stdout.length > 0 ? stdout : i18n("Synchronizace selhala."))
             }

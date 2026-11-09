@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(cd -- "$(dirname -- "$0")" && pwd)
+cd "$ROOT"
+
+usage() {
+    printf 'Usage: %s [--dry-run] vX.Y.Z\n' "$0" >&2
+    exit 2
+}
+
+die() {
+    printf 'ERROR: %s\n' "$*" >&2
+    exit 1
+}
+
+DRY_RUN=0
+if [ "${1:-}" = "--dry-run" ]; then
+    DRY_RUN=1
+    shift
+fi
+
+[ "$#" -eq 1 ] || usage
+TAG=$1
+[[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z][0-9A-Za-z.-]*)?$ ]] || die "invalid tag: $TAG"
+VERSION=${TAG#v}
+
+KDE_STORE_PRODUCT_ID=2381478
+KDE_STORE_URL="https://www.opendesktop.org/p/${KDE_STORE_PRODUCT_ID}/"
+
+[ -d "$ROOT/.log" ] || die "project .log directory is missing"
+LOG_SUFFIX=""
+[ "$DRY_RUN" -eq 0 ] || LOG_SUFFIX="-dry-run"
+LOG_FILE="$ROOT/.log/app-memory-release-${TAG}${LOG_SUFFIX}-$(date -u +%Y%m%dT%H%M%SZ).log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+printf '==> App Memory Bar release helper\n'
+printf '    mode: %s\n' "$([ "$DRY_RUN" -eq 1 ] && printf DRY-RUN || printf RELEASE)"
+printf '    tag:  %s\n' "$TAG"
+printf '    log:  %s\n' "$LOG_FILE"
+
+command -v git >/dev/null || die "git not found"
+command -v gh >/dev/null || die "gh not found"
+command -v python3 >/dev/null || die "python3 not found"
+command -v zip >/dev/null || die "zip not found"
+command -v unzip >/dev/null || die "unzip not found"
+command -v tee >/dev/null || die "tee not found"
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "not inside a Git repository"
+[ "$(git rev-parse --show-toplevel)" = "$ROOT" ] || die "run the helper from the repository root"
+
+# .plasmoids is local build/history storage, never a tracked project path.
+EXCLUDE_FILE=$(git rev-parse --git-path info/exclude)
+touch "$EXCLUDE_FILE"
+grep -Fqx "/.plasmoids/" "$EXCLUDE_FILE" || printf '%s\n' "/.plasmoids/" >> "$EXCLUDE_FILE"
+
+gh auth status >/dev/null 2>&1 || die "gh is not authenticated"
+
+git diff --quiet || die "tracked working tree has unstaged changes"
+git diff --cached --quiet || die "index has staged changes"
+if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+    printf '%s\n' 'Untracked files:' >&2
+    git ls-files --others --exclude-standard >&2
+    die "working tree has untracked files"
+fi
+
+META_VERSION=$(python3 -c 'import json; print(json.load(open("metadata.json"))["KPlugin"]["Version"])')
+[ "$META_VERSION" = "$VERSION" ] || die "metadata version is $META_VERSION, tag requests $VERSION"
+
+WORKFLOW="$ROOT/.github/workflows/release-deb.yml"
+[ -f "$WORKFLOW" ] || die "missing tag-based Debian workflow: $WORKFLOW"
+grep -Eq "^[[:space:]]*-[[:space:]]*['\"]?v\\*['\"]?[[:space:]]*$" "$WORKFLOW" || die "release-deb workflow is not configured for v* tags"
+
+printf '==> Build plasmoid %s\n' "$VERSION"
+PLASMOID=$(./scripts/build-plasmoid.sh)
+[ -f "$PLASMOID" ] || die "build did not create $PLASMOID"
+
+printf '==> Verify plasmoid\n'
+./scripts/check-plasmoid.sh "$PLASMOID"
+
+HEAD_COMMIT=$(git rev-parse HEAD)
+
+if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+    LOCAL_TAG_COMMIT=$(git rev-list -n1 "$TAG")
+    [ "$LOCAL_TAG_COMMIT" = "$HEAD_COMMIT" ] || die "local tag $TAG points to $LOCAL_TAG_COMMIT, HEAD is $HEAD_COMMIT"
+    LOCAL_TAG_STATE="already exists at HEAD"
+else
+    LOCAL_TAG_STATE="would be created at HEAD"
+fi
+
+REMOTE_TAG_COMMIT=$(git ls-remote --tags origin "refs/tags/$TAG^{}" | awk 'NR==1{print $1}')
+if [ -z "$REMOTE_TAG_COMMIT" ]; then
+    REMOTE_TAG_COMMIT=$(git ls-remote --tags origin "refs/tags/$TAG" | awk 'NR==1{print $1}')
+fi
+
+if [ -n "$REMOTE_TAG_COMMIT" ]; then
+    [ "$REMOTE_TAG_COMMIT" = "$HEAD_COMMIT" ] || die "remote tag $TAG points to $REMOTE_TAG_COMMIT, HEAD is $HEAD_COMMIT"
+    REMOTE_TAG_STATE="already exists on origin at HEAD"
+else
+    REMOTE_TAG_STATE="would be pushed to origin"
+fi
+
+if [ "$DRY_RUN" -eq 1 ]; then
+    printf '\nDry-run checks passed:\n'
+    printf '  tag:            %s\n' "$TAG"
+    printf '  local tag:      %s\n' "$LOCAL_TAG_STATE"
+    printf '  remote tag:     %s\n' "$REMOTE_TAG_STATE"
+    printf '  plasmoid:       %s\n' "$PLASMOID"
+    printf '  Debian CI:      configured for v* tags\n'
+    printf '  Git tag:        NOT CREATED\n'
+    printf '  Git push:       NOT RUN\n'
+    printf '  GitHub Release: NOT RUN\n'
+    printf '  KDE Store:      MANUAL\n'
+    printf '  product:        %s\n' "$KDE_STORE_URL"
+    printf '  upload:         %s\n' "$PLASMOID"
+    printf '  log:            %s\n' "$LOG_FILE"
+    exit 0
+fi
+
+if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+    printf '==> Create tag %s\n' "$TAG"
+    git tag -a "$TAG" -m "App Memory Bar $VERSION"
+else
+    printf '==> Tag %s already exists locally\n' "$TAG"
+fi
+
+if [ -z "$REMOTE_TAG_COMMIT" ]; then
+    printf '==> Push tag %s\n' "$TAG"
+    git push origin "$TAG"
+else
+    printf '==> Tag %s already exists on origin\n' "$TAG"
+fi
+
+printf '==> Publish GitHub Release plasmoid asset\n'
+if gh release view "$TAG" >/dev/null 2>&1; then
+    gh release upload "$TAG" "$PLASMOID" --clobber
+else
+    gh release create "$TAG" "$PLASMOID" --verify-tag --title "App Memory Bar $VERSION" --generate-notes
+fi
+
+printf '\nRelease published:\n'
+printf '  tag:       %s\n' "$TAG"
+printf '  plasmoid:  %s\n' "$PLASMOID"
+printf '  deb:       GitHub Actions release-deb workflow will build and attach it\n'
+printf '  KDE Store: MANUAL\n'
+printf '  product:   %s\n' "$KDE_STORE_URL"
+printf '  upload:    %s\n' "$PLASMOID"
+printf '  log:       %s\n' "$LOG_FILE"
+
+printf '\nRecent workflow runs:\n'
+gh run list --workflow release-deb.yml --limit 3 2>/dev/null || true

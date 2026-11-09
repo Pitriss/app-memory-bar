@@ -1,0 +1,43 @@
+.TH APP-MEMORY-BAR-MIGRATE 1 "November 2026" "App Memory Bar" "User Commands"
+.SH NAME
+app-memory-bar-migrate \- migrate a per-user App Memory Bar installation to the packaged system installation
+.SH SYNOPSIS
+.B app-memory-bar-migrate
+.RB [ --status | --migrate | --automatic ]
+.SH DESCRIPTION
+.B app-memory-bar-migrate
+backs up an App Memory Bar plasmoid installed below the current user's XDG data directory and a per-user
+.B app-memory-bar.service
+unit that would otherwise shadow the files installed by the Debian package.
+.PP
+Backups are stored below
+.BR $XDG_STATE_HOME/app-memory-bar/migration-backup/
+(or
+.BR ~/.local/state/app-memory-bar/migration-backup/
+when XDG_STATE_HOME is unset). Plasma widget configuration and
+.B ~/.config/app-memory-bar/
+are not removed.
+.PP
+The command must be run as the desktop user, not as root.
+.SH OPTIONS
+.TP
+.B --status
+Print the detected system and local installation state as JSON.
+.TP
+.B --migrate
+Run the migration immediately and restart the packaged user backend.
+.TP
+.B --automatic
+Non-interactive mode used by the packaged systemd user migration service. The backend start is queued without waiting for it.
+.SH FILES
+.TP
+.B ~/.local/share/plasma/plasmoids/cz.pitriss.appmemorybar/
+Default location of a legacy per-user plasmoid installation.
+.TP
+.B ~/.config/systemd/user/app-memory-bar.service
+Per-user unit that shadows the packaged unit and is backed up during migration.
+.TP
+.B ~/.local/state/app-memory-bar/migration-v1.json
+Migration state marker when XDG_STATE_HOME is unset.
+.SH SEE ALSO
+.BR systemctl (1)

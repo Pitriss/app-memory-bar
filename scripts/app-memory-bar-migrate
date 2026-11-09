@@ -1,0 +1,214 @@
+#!/usr/bin/python3
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+
+PLUGIN_ID = "cz.pitriss.appmemorybar"
+UNIT_NAME = "app-memory-bar.service"
+SYSTEM_PLUGIN = pathlib.Path("/usr/share/plasma/plasmoids") / PLUGIN_ID
+SYSTEM_UNIT_CANDIDATES = (
+    pathlib.Path("/usr/lib/systemd/user") / UNIT_NAME,
+    pathlib.Path("/lib/systemd/user") / UNIT_NAME,
+)
+
+
+def xdg_path(env_name: str, fallback: pathlib.Path) -> pathlib.Path:
+    value = os.environ.get(env_name, "").strip()
+    return pathlib.Path(value).expanduser() if value else fallback
+
+
+def paths() -> dict[str, pathlib.Path]:
+    home = pathlib.Path.home()
+    data_home = xdg_path("XDG_DATA_HOME", home / ".local/share")
+    config_home = xdg_path("XDG_CONFIG_HOME", home / ".config")
+    state_home = xdg_path("XDG_STATE_HOME", home / ".local/state")
+    state_dir = state_home / "app-memory-bar"
+    return {
+        "local_plugin": data_home / "plasma/plasmoids" / PLUGIN_ID,
+        "local_unit": config_home / "systemd/user" / UNIT_NAME,
+        "state_dir": state_dir,
+        "backup_root": state_dir / "migration-backup",
+        "marker": state_dir / "migration-v1.json",
+    }
+
+
+def system_unit() -> pathlib.Path | None:
+    for candidate in SYSTEM_UNIT_CANDIDATES:
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def run_systemctl(*args: str, check: bool = False) -> subprocess.CompletedProcess[str]:
+    cp = subprocess.run(
+        ["systemctl", "--user", *args],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if check and cp.returncode != 0:
+        detail = (cp.stderr or cp.stdout).strip() or f"exit {cp.returncode}"
+        raise RuntimeError(f"systemctl --user {' '.join(args)}: {detail}")
+    return cp
+
+
+def status_payload() -> dict[str, object]:
+    p = paths()
+    unit = system_unit()
+    marker = None
+    try:
+        marker = json.loads(p["marker"].read_text(encoding="utf-8")) if p["marker"].is_file() else None
+    except (OSError, ValueError):
+        marker = {"invalid": True}
+    return {
+        "systemPlugin": str(SYSTEM_PLUGIN),
+        "systemPluginPresent": SYSTEM_PLUGIN.joinpath("metadata.json").is_file(),
+        "systemUnit": str(unit) if unit else "",
+        "systemUnitPresent": unit is not None,
+        "localPlugin": str(p["local_plugin"]),
+        "localPluginPresent": p["local_plugin"].exists() or p["local_plugin"].is_symlink(),
+        "localUnit": str(p["local_unit"]),
+        "localUnitPresent": p["local_unit"].exists() or p["local_unit"].is_symlink(),
+        "lastMigration": marker,
+    }
+
+
+def print_status() -> int:
+    data = status_payload()
+    print(json.dumps(data, ensure_ascii=False, indent=2))
+    return 0
+
+
+def unique_backup_dir(root: pathlib.Path) -> pathlib.Path:
+    stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    candidate = root / stamp
+    suffix = 0
+    while candidate.exists():
+        suffix += 1
+        candidate = root / f"{stamp}-{suffix}"
+    candidate.mkdir(parents=True, mode=0o700)
+    return candidate
+
+
+def move_to_backup(source: pathlib.Path, backup_dir: pathlib.Path, name: str) -> pathlib.Path | None:
+    if not (source.exists() or source.is_symlink()):
+        return None
+    target = backup_dir / name
+    shutil.move(str(source), str(target))
+    return target
+
+
+def write_marker(marker: pathlib.Path, backup_dir: pathlib.Path | None, moved: list[str], mode: str) -> None:
+    marker.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "version": 1,
+        "timestampUtc": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "mode": mode,
+        "backup": str(backup_dir) if backup_dir else "",
+        "moved": moved,
+    }
+    tmp = marker.with_suffix(".tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.chmod(tmp, 0o600)
+    tmp.replace(marker)
+
+
+def migrate(mode: str) -> int:
+    if os.geteuid() == 0:
+        print("ERROR: migrátor se spouští jako běžný uživatel, ne přes sudo/root", file=sys.stderr)
+        return 2
+
+    p = paths()
+    if not SYSTEM_PLUGIN.joinpath("metadata.json").is_file():
+        print(f"ERROR: systémový plasmoid není nainstalovaný: {SYSTEM_PLUGIN}", file=sys.stderr)
+        return 3
+    if system_unit() is None:
+        print("ERROR: systémová app-memory-bar.service nebyla nalezena", file=sys.stderr)
+        return 4
+
+    local_plugin = p["local_plugin"]
+    local_unit = p["local_unit"]
+    has_plugin = local_plugin.exists() or local_plugin.is_symlink()
+    has_unit = local_unit.exists() or local_unit.is_symlink()
+
+    if not has_plugin and not has_unit:
+        write_marker(p["marker"], None, [], mode)
+        print("OK: žádná lokální instalace ke migraci")
+        return 0
+
+    # A stale per-user unit shadows /usr/lib/systemd/user/app-memory-bar.service.
+    # Stop and disable it before moving anything, then re-enable the packaged unit.
+    run_systemctl("stop", UNIT_NAME)
+    run_systemctl("disable", UNIT_NAME)
+
+    backup_dir = unique_backup_dir(p["backup_root"])
+    moved: list[str] = []
+    moved_pairs: list[tuple[pathlib.Path, pathlib.Path]] = []
+    try:
+        moved_plugin = move_to_backup(local_plugin, backup_dir, PLUGIN_ID)
+        if moved_plugin:
+            moved.append(str(moved_plugin))
+            moved_pairs.append((moved_plugin, local_plugin))
+        moved_unit = move_to_backup(local_unit, backup_dir, UNIT_NAME)
+        if moved_unit:
+            moved.append(str(moved_unit))
+            moved_pairs.append((moved_unit, local_unit))
+
+        run_systemctl("daemon-reload", check=True)
+        run_systemctl("enable", UNIT_NAME, check=True)
+        if mode == "automatic":
+            # Do not wait for app-memory-bar.service here. It is ordered after the
+            # migration unit and waiting synchronously would deadlock the transaction.
+            run_systemctl("start", "--no-block", UNIT_NAME, check=True)
+        else:
+            run_systemctl("restart", UNIT_NAME, check=True)
+    except Exception as exc:
+        rollback_errors: list[str] = []
+        for backup, original in reversed(moved_pairs):
+            try:
+                original.parent.mkdir(parents=True, exist_ok=True)
+                if not (original.exists() or original.is_symlink()) and (backup.exists() or backup.is_symlink()):
+                    shutil.move(str(backup), str(original))
+            except Exception as rollback_exc:
+                rollback_errors.append(f"{original}: {rollback_exc}")
+        run_systemctl("daemon-reload")
+        if has_unit:
+            run_systemctl("enable", UNIT_NAME)
+            run_systemctl("start", "--no-block", UNIT_NAME)
+        print(f"ERROR: migrace selhala: {exc}", file=sys.stderr)
+        if rollback_errors:
+            print("ERROR: rollback nebyl úplný: " + " | ".join(rollback_errors), file=sys.stderr)
+            print(f"Zkontroluj ručně: {backup_dir}", file=sys.stderr)
+        else:
+            print("INFO: lokální soubory byly vráceny zpět", file=sys.stderr)
+        return 5
+
+    write_marker(p["marker"], backup_dir, moved, mode)
+    print(f"OK: lokální instalace přesunuta do {backup_dir}")
+    if has_plugin:
+        print("INFO: Plasma může do odhlášení/restartu plasmashellu držet již načtenou starou QML instanci.")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(prog="app-memory-bar-migrate")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--status", action="store_true", help="show migration state")
+    group.add_argument("--automatic", action="store_true", help="migrate non-interactively from systemd --user")
+    group.add_argument("--migrate", action="store_true", help="run migration now")
+    args = parser.parse_args()
+
+    if args.status:
+        return print_status()
+    return migrate("automatic" if args.automatic else "manual")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

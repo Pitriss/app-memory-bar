@@ -1,0 +1,16 @@
+Source: plasma-widget-app-memory-bar
+Section: kde
+Priority: optional
+Maintainer: Pitriss <5106460+Pitriss@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Homepage: https://github.com/Pitriss/app-memory-bar
+
+Package: plasma-widget-app-memory-bar
+Architecture: all
+Depends: ${misc:Depends}, python3, systemd, plasma-workspace (>= 6)
+Description: Plasma 6 per-application memory monitor and limiter
+ App Memory Bar monitors memory used by desktop applications through cgroup v2,
+ aggregates related systemd user units, and maintains configurable per-app
+ memory budgets through a persistent user backend.

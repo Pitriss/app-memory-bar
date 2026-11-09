@@ -1,0 +1,13 @@
+[Unit]
+Description=App Memory Bar backend
+Wants=app-memory-bar-migrate.service
+After=app-memory-bar-migrate.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -B /usr/share/plasma/plasmoids/cz.pitriss.appmemorybar/contents/code/app-memory-daemon.py
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target
