@@ -1,0 +1,18 @@
+{
+  "KPlugin": {
+    "Authors": [
+      {
+        "Name": "Pitriss"
+      }
+    ],
+    "Category": "System Information",
+    "Description": "Monitors per-application cgroup memory through a persistent systemd user backend and manages safe per-app memory budgets.",
+    "Icon": "utilities-system-monitor",
+    "Id": "cz.pitriss.appmemorybar",
+    "Name": "App Memory Bar",
+    "Version": "0.10.0",
+    "License": "MIT"
+  },
+  "X-Plasma-API-Minimum-Version": "6.0",
+  "KPackageStructure": "Plasma/Applet"
+}
