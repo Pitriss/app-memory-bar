@@ -10,7 +10,7 @@
     "Icon": "utilities-system-monitor",
     "Id": "cz.pitriss.appmemorybar",
     "Name": "App Memory Bar",
-    "Version": "0.10.0",
+    "Version": "0.10.1",
     "License": "MIT"
   },
   "X-Plasma-API-Minimum-Version": "6.0",
