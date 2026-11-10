@@ -73,7 +73,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          lintian --display-info --fail-on error,warning "$CHANGES" 2>&1 | tee "$LINTIAN_LOG"
+          lintian --profile debian --display-info --fail-on error,warning "$CHANGES" 2>&1 | tee "$LINTIAN_LOG"
 
       - name: Upload Lintian log
         if: always()

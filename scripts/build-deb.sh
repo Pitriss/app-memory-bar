@@ -32,7 +32,7 @@ cp -a "$ROOT/scripts/app-memory-bar-migrate" "$SRC/scripts/"
 cp -a "$ROOT/docs/man/man1/app-memory-bar-migrate.1" "$SRC/docs/man/man1/"
 
 cat > "$SRC/debian/changelog" <<EOF_CHANGELOG
-plasma-widget-app-memory-bar ($VERSION) unstable; urgency=medium
+plasma-widget-app-memory-bar ($VERSION) trixie; urgency=medium
 
   * App Memory Bar $VERSION release.
 
