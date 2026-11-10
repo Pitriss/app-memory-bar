@@ -17,7 +17,7 @@ Local `.plasmoid` builds are kept in `.plasmoids/`. This directory is intended a
 ## Install
 
 ```bash
-kpackagetool6 -t Plasma/Applet -i .plasmoids/app-memory-bar-0.10.2.plasmoid
+kpackagetool6 -t Plasma/Applet -i .plasmoids/app-memory-bar-0.10.3.plasmoid
 ```
 
 ## Release
@@ -25,7 +25,7 @@ kpackagetool6 -t Plasma/Applet -i .plasmoids/app-memory-bar-0.10.2.plasmoid
 Releases are driven by the root helper. The tag version must match `KPlugin.Version` in `metadata.json`.
 
 ```bash
-./app-memory-release v0.10.2
+./app-memory-release v0.10.3
 ```
 
 The helper requires a clean Git working tree and an authenticated `gh` CLI. It builds and verifies the `.plasmoid`, stores it in `.plasmoids/`, creates/pushes the annotated tag, and publishes the `.plasmoid` as a GitHub Release asset.
