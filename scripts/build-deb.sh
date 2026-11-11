@@ -13,7 +13,7 @@ VERSION=${VERSION#v}
 META_VERSION=$(python3 -c 'import json; print(json.load(open("metadata.json"))["KPlugin"]["Version"])')
 [ "$META_VERSION" = "$VERSION" ] || { printf 'ERROR: metadata version %s != requested %s\n' "$META_VERSION" "$VERSION" >&2; exit 1; }
 
-for path in metadata.json contents debian LICENSE README.md scripts/app-memory-bar-migrate systemd docs/man/man1/app-memory-bar-migrate.1; do
+for path in metadata.json contents po debian LICENSE README.md scripts/compile-translations.py scripts/app-memory-bar-migrate systemd docs/man/man1/app-memory-bar-migrate.1; do
     [ -e "$ROOT/$path" ] || { printf 'ERROR: required packaging path missing: %s\n' "$path" >&2; exit 1; }
 done
 
@@ -30,6 +30,7 @@ cp -a "$ROOT/metadata.json" "$ROOT/contents" "$ROOT/debian" "$ROOT/LICENSE" "$RO
 mkdir -p "$SRC/debian" "$SRC/scripts" "$SRC/docs/man/man1"
 cp -a "$ROOT/scripts/app-memory-bar-migrate" "$SRC/scripts/"
 cp -a "$ROOT/docs/man/man1/app-memory-bar-migrate.1" "$SRC/docs/man/man1/"
+python3 "$ROOT/scripts/compile-translations.py" "$ROOT/po" "$SRC/contents/locale"
 
 cat > "$SRC/debian/changelog" <<EOF_CHANGELOG
 plasma-widget-app-memory-bar ($VERSION) trixie; urgency=medium

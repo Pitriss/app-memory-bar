@@ -48,14 +48,14 @@ QQC2.ScrollView {
 
     function fontSummary() {
         if (usingSystemFont) {
-            return i18n("Systémový font")
+            return i18n("System font")
         }
 
         let details = cfg_fontFamily + "  " + Number(cfg_fontPointSize).toFixed(1) + " pt"
         if (cfg_fontStyleName.length > 0) {
             details += "  " + cfg_fontStyleName
         } else {
-            details += "  " + i18n("váha %1", cfg_fontWeight)
+            details += "  " + i18n("weight %1", cfg_fontWeight)
         }
         return details
     }
@@ -104,11 +104,11 @@ QQC2.ScrollView {
 
     QQC2.Label {
         Kirigami.FormData.isSection: true
-        text: i18n("Geometrie")
+        text: i18n("Geometry")
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Průhlednost pozadí:")
+        Kirigami.FormData.label: i18n("Background transparency:")
         Layout.fillWidth: true
 
         QQC2.Slider {
@@ -130,7 +130,7 @@ QQC2.ScrollView {
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Radius baru:")
+        Kirigami.FormData.label: i18n("Bar radius:")
         Layout.fillWidth: true
 
         QQC2.Slider {
@@ -152,7 +152,7 @@ QQC2.ScrollView {
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Radius pozadí:")
+        Kirigami.FormData.label: i18n("Background radius:")
         Layout.fillWidth: true
 
         QQC2.Slider {
@@ -174,7 +174,7 @@ QQC2.ScrollView {
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Padding obsahu:")
+        Kirigami.FormData.label: i18n("Content padding:")
         Layout.fillWidth: true
 
         QQC2.Slider {
@@ -201,7 +201,7 @@ QQC2.ScrollView {
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Písmo:")
+        Kirigami.FormData.label: i18n("Font:")
         Layout.fillWidth: true
 
         QQC2.Button {
@@ -212,40 +212,40 @@ QQC2.ScrollView {
         }
 
         QQC2.Button {
-            text: i18n("Vybrat…")
+            text: i18n("Choose…")
             onClicked: page.openFontDialog()
         }
 
         QQC2.ToolButton {
             icon.name: "edit-undo"
-            text: i18n("Systémový")
+            text: i18n("System")
             display: QQC2.AbstractButton.IconOnly
             enabled: !page.usingSystemFont
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: i18n("Použít systémový font")
+            QQC2.ToolTip.text: i18n("Use system font")
             onClicked: page.setSystemFont()
         }
     }
 
     QQC2.Label {
-        Kirigami.FormData.label: i18n("Náhled:")
+        Kirigami.FormData.label: i18n("Preview:")
         text: i18n("App RAM  6.4 GiB")
         font: page.effectiveFont
     }
 
     QQC2.Label {
         Kirigami.FormData.isSection: true
-        text: i18n("Barvy")
+        text: i18n("Colors")
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Pozadí widgetu:")
+        Kirigami.FormData.label: i18n("Widget background:")
 
         KQControls.ColorButton {
             id: backgroundColorButton
             color: page.backgroundPreviewColor()
             showAlphaChannel: false
-            dialogTitle: i18n("Barva pozadí widgetu")
+            dialogTitle: i18n("Widget background color")
             onAccepted: function(chosenColor) {
                 page.cfg_backgroundColor = String(chosenColor)
             }
@@ -256,19 +256,19 @@ QQC2.ScrollView {
             display: QQC2.AbstractButton.IconOnly
             enabled: page.cfg_backgroundColor.length > 0
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: i18n("Použít systémovou barvu")
+            QQC2.ToolTip.text: i18n("Use system color")
             onClicked: page.cfg_backgroundColor = ""
         }
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Pozadí baru:")
+        Kirigami.FormData.label: i18n("Bar background:")
 
         KQControls.ColorButton {
             id: barTrackColorButton
             color: page.trackPreviewColor()
             showAlphaChannel: true
-            dialogTitle: i18n("Barva pozadí baru")
+            dialogTitle: i18n("Bar background color")
             onAccepted: function(chosenColor) {
                 page.cfg_barTrackColor = String(chosenColor)
             }
@@ -279,36 +279,36 @@ QQC2.ScrollView {
             display: QQC2.AbstractButton.IconOnly
             enabled: page.cfg_barTrackColor.length > 0
             QQC2.ToolTip.visible: hovered
-            QQC2.ToolTip.text: i18n("Použít systémovou barvu")
+            QQC2.ToolTip.text: i18n("Use system color")
             onClicked: page.cfg_barTrackColor = ""
         }
     }
 
     KQControls.ColorButton {
-        Kirigami.FormData.label: i18n("Pod soft limitem:")
+        Kirigami.FormData.label: i18n("Below soft limit:")
         color: page.cfg_okColor
         showAlphaChannel: false
-        dialogTitle: i18n("Barva pod soft limitem")
+        dialogTitle: i18n("Color below soft limit")
         onAccepted: function(chosenColor) {
             page.cfg_okColor = chosenColor
         }
     }
 
     KQControls.ColorButton {
-        Kirigami.FormData.label: i18n("Nad soft limitem:")
+        Kirigami.FormData.label: i18n("Above soft limit:")
         color: page.cfg_warningColor
         showAlphaChannel: false
-        dialogTitle: i18n("Barva nad soft limitem")
+        dialogTitle: i18n("Color above soft limit")
         onAccepted: function(chosenColor) {
             page.cfg_warningColor = chosenColor
         }
     }
 
     KQControls.ColorButton {
-        Kirigami.FormData.label: i18n("Blízko hard limitu:")
+        Kirigami.FormData.label: i18n("Near hard limit:")
         color: page.cfg_dangerColor
         showAlphaChannel: false
-        dialogTitle: i18n("Barva blízko hard limitu")
+        dialogTitle: i18n("Color near hard limit")
         onAccepted: function(chosenColor) {
             page.cfg_dangerColor = chosenColor
         }
@@ -316,17 +316,17 @@ QQC2.ScrollView {
 
         QQC2.Label {
             Kirigami.FormData.isSection: true
-            text: i18n("Synchronizace instancí")
+            text: i18n("Instance synchronization")
         }
 
         RowLayout {
-            Kirigami.FormData.label: i18n("Ostatní widgety:")
+            Kirigami.FormData.label: i18n("Other widgets:")
             Layout.fillWidth: true
 
             QQC2.Button {
                 Layout.fillWidth: true
                 icon.name: "view-refresh"
-                text: i18n("Synchronizovat vzhled")
+                text: i18n("Synchronize appearance")
                 enabled: !page.syncBusy
                 onClicked: page.syncAppearance()
             }
@@ -336,22 +336,22 @@ QQC2.ScrollView {
         QQC2.Label {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: i18n("Vzhled se kopíruje z aktuálně aplikovaného vzhledu této instance. Pokud jsi něco změnil v konfiguraci, nejprve stiskni Použít.")
+            text: i18n("The appearance is copied from the currently applied appearance of this instance. If you changed anything in the configuration, click Apply first.")
             opacity: 0.76
         }
 
         QQC2.Label {
             visible: page.syncStatus.length > 0 || page.syncBusy
-            Kirigami.FormData.label: i18n("Synchronizace:")
+            Kirigami.FormData.label: i18n("Synchronization:")
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: page.syncBusy ? i18n("Synchronizuji…") : page.syncStatus
+            text: page.syncBusy ? i18n("Synchronizing…") : page.syncStatus
         }
     }
 
     FontDialog {
         id: fontDialog
-        title: i18n("Vybrat font")
+        title: i18n("Choose font")
 
         onAccepted: {
             page.cfg_fontFamily = selectedFont.family
@@ -388,9 +388,9 @@ QQC2.ScrollView {
             const stderr = String(data["stderr"] || "").trim()
             const fields = stdout.split("\t")
             if (fields[0] === "OK" && fields[1] === "appearance") {
-                page.syncStatus = i18np("Vzhled byl synchronizován do %1 další instance.", "Vzhled byl synchronizován do %1 dalších instancí.", Number(fields[2]))
+                page.syncStatus = i18np("Appearance was synchronized to %1 other instance.", "Appearance was synchronized to %1 other instances.", Number(fields[2]))
             } else {
-                page.syncStatus = stderr.length > 0 ? stderr : (stdout.length > 0 ? stdout : i18n("Synchronizace selhala."))
+                page.syncStatus = stderr.length > 0 ? stderr : (stdout.length > 0 ? stdout : i18n("Synchronization failed."))
             }
         }
     }

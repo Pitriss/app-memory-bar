@@ -1,0 +1,296 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: App Memory Bar\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Language-Team: Polish\n"
+"Plural-Forms: nplurals=3; plural=(n==1)?0:(n%10>=2 && n%10<=4 && (n%100<12 || n%100>14))?1:2;\n"
+
+msgid "no limit"
+msgstr "bez limitu"
+
+#, kde-format
+msgid "%1 — not currently running"
+msgstr "%1 — obecnie nie działa"
+
+#, kde-format
+msgid "Application binding was updated to %1."
+msgstr "Powiązanie aplikacji zostało zaktualizowane do %1."
+
+msgid "no shared limit"
+msgstr "bez wspólnego limitu"
+
+#, kde-format
+msgid "%1 (%2) — not currently running"
+msgstr "%1 (%2) — obecnie nie działa"
+
+msgid "No applications were found in the user app.slice."
+msgstr "Nie znaleziono żadnych aplikacji w app.slice użytkownika."
+
+msgid "Applications in this session"
+msgstr "Aplikacje w tej sesji"
+
+msgid "Application:"
+msgstr "Aplikacja:"
+
+msgid "Scan again"
+msgstr "Skanuj ponownie"
+
+msgid "Scan"
+msgstr "Skanuj"
+
+msgid "Executable:"
+msgstr "Plik wykonywalny:"
+
+msgid "Systemd units:"
+msgstr "Jednostki systemd:"
+
+msgid "The application is not running."
+msgstr "Aplikacja obecnie nie działa."
+
+msgid "Processes:"
+msgstr "Procesy:"
+
+msgid "Could not determine processes."
+msgstr "Nie udało się określić procesów."
+
+msgid "Backend runs as a systemd --user service. The widget reads the cache by exact executable; a global scan is used only when selecting a new application. A brief detection outage therefore does not immediately make the application disappear."
+msgstr "Backend działa jako usługa systemd --user. Widżet odczytuje pamięć podręczną według dokładnej ścieżki pliku wykonywalnego; globalny skan jest używany tylko przy wyborze nowej aplikacji. Krótka przerwa w wykrywaniu nie powoduje więc natychmiastowego zniknięcia aplikacji."
+
+msgid "Total application memory budget"
+msgstr "Całkowity budżet pamięci aplikacji"
+
+msgid "Soft limit (MemoryHigh):"
+msgstr "Limit miękki (MemoryHigh):"
+
+msgid "Hard limit (MemoryMax):"
+msgstr "Limit twardy (MemoryMax):"
+
+msgid "Validation:"
+msgstr "Kontrola:"
+
+msgid "Select an application."
+msgstr "Wybierz aplikację."
+
+msgid "Hard limit must be higher than soft limit."
+msgstr "Limit twardy musi być wyższy niż limit miękki."
+
+#, kde-format
+msgid "The application is currently above the hard limit (%1). The widget applies MemoryHigh and postpones MemoryMax until usage drops."
+msgstr "Aplikacja przekracza obecnie limit twardy (%1). Widżet stosuje MemoryHigh i odkłada MemoryMax do czasu spadku użycia pamięci."
+
+msgid "The budget can be safely applied to all detected units of the application."
+msgstr "Budżet można bezpiecznie zastosować do wszystkich wykrytych jednostek aplikacji."
+
+msgid "Persistence:"
+msgstr "Trwałość:"
+
+msgid "Maintain total limit automatically"
+msgstr "Automatycznie utrzymuj całkowity limit"
+
+msgid "Persistence is maintained by a separate systemd --user service, so it survives a plasmashell restart. The soft limit is distributed across all current systemd units of the application. With a single unit, MemoryMax is also applied; with multiple sibling units, the hard limit safely remains only an overall target."
+msgstr "Trwałość jest utrzymywana przez osobną usługę systemd --user, dzięki czemu przetrwa restart plasmashell. Limit miękki jest rozdzielany między wszystkie bieżące jednostki systemd aplikacji. Przy jednej jednostce stosowany jest także MemoryMax; przy wielu jednostkach równorzędnych limit twardy bezpiecznie pozostaje jedynie celem całkowitym."
+
+msgid "Actions:"
+msgstr "Akcje:"
+
+msgid "Apply to entire application"
+msgstr "Zastosuj do całej aplikacji"
+
+msgid "Clear runtime limits"
+msgstr "Wyczyść limity czasu działania"
+
+msgid "Status:"
+msgstr "Stan:"
+
+msgid "Applying change…"
+msgstr "Wprowadzanie zmiany…"
+
+msgid "Clear runtime limits?"
+msgstr "Wyczyścić limity czasu działania?"
+
+msgid "Sets MemoryHigh and MemoryMax to infinity for all currently detected units of this application. Disable automatic persistence separately, otherwise the widget will reapply the limits on the next poll."
+msgstr "Ustawia MemoryHigh i MemoryMax na nieskończoność dla wszystkich obecnie wykrytych jednostek tej aplikacji. Wyłącz osobno automatyczną trwałość, w przeciwnym razie widżet ponownie ustawi limity przy następnym odpytywaniu."
+
+msgid "The scan returned no result. Use the Scan button to run it again immediately."
+msgstr "Skanowanie nie zwróciło wyniku. Użyj przycisku Skanuj, aby uruchomić je ponownie od razu."
+
+#, kde-format
+msgid "Scan failed: %1"
+msgstr "Skanowanie nie powiodło się: %1"
+
+msgid "Application runtime limits were cleared."
+msgstr "Limity czasu działania aplikacji zostały wyczyszczone."
+
+msgid "Soft limit was applied; hard limit is waiting for memory usage to drop."
+msgstr "Limit miękki został zastosowany; limit twardy czeka na spadek użycia pamięci."
+
+msgid "Soft budget was applied to all units; hard limit is only an overall visual target because the application uses multiple sibling cgroups."
+msgstr "Budżet miękki został zastosowany do wszystkich jednostek; limit twardy jest tylko ogólnym celem wizualnym, ponieważ aplikacja używa wielu równorzędnych cgroups."
+
+msgid "Memory budget was applied to the application."
+msgstr "Budżet pamięci został zastosowany do aplikacji."
+
+msgid "Failed to change limits."
+msgstr "Zmiana limitów nie powiodła się."
+
+msgid "System font"
+msgstr "Czcionka systemowa"
+
+#, kde-format
+msgid "weight %1"
+msgstr "grubość %1"
+
+msgid "Geometry"
+msgstr "Geometria"
+
+msgid "Background transparency:"
+msgstr "Przezroczystość tła:"
+
+msgid "Bar radius:"
+msgstr "Promień paska:"
+
+msgid "Background radius:"
+msgstr "Promień tła:"
+
+msgid "Content padding:"
+msgstr "Odstęp zawartości:"
+
+msgid "Font"
+msgstr "Czcionka"
+
+msgid "Font:"
+msgstr "Czcionka:"
+
+msgid "Choose…"
+msgstr "Wybierz…"
+
+msgid "System"
+msgstr "Systemowa"
+
+msgid "Use system font"
+msgstr "Użyj czcionki systemowej"
+
+msgid "Preview:"
+msgstr "Podgląd:"
+
+msgid "App RAM  6.4 GiB"
+msgstr "App RAM  6.4 GiB"
+
+msgid "Colors"
+msgstr "Kolory"
+
+msgid "Widget background:"
+msgstr "Tło widżetu:"
+
+msgid "Widget background color"
+msgstr "Kolor tła widżetu"
+
+msgid "Use system color"
+msgstr "Użyj koloru systemowego"
+
+msgid "Bar background:"
+msgstr "Tło paska:"
+
+msgid "Bar background color"
+msgstr "Kolor tła paska"
+
+msgid "Below soft limit:"
+msgstr "Poniżej limitu miękkiego:"
+
+msgid "Color below soft limit"
+msgstr "Kolor poniżej limitu miękkiego"
+
+msgid "Above soft limit:"
+msgstr "Powyżej limitu miękkiego:"
+
+msgid "Color above soft limit"
+msgstr "Kolor powyżej limitu miękkiego"
+
+msgid "Near hard limit:"
+msgstr "Blisko limitu twardego:"
+
+msgid "Color near hard limit"
+msgstr "Kolor blisko limitu twardego"
+
+msgid "Instance synchronization"
+msgstr "Synchronizacja instancji"
+
+msgid "Other widgets:"
+msgstr "Inne widżety:"
+
+msgid "Synchronize appearance"
+msgstr "Synchronizuj wygląd"
+
+msgid "The appearance is copied from the currently applied appearance of this instance. If you changed anything in the configuration, click Apply first."
+msgstr "Wygląd jest kopiowany z aktualnie zastosowanego wyglądu tej instancji. Jeśli zmieniono coś w konfiguracji, najpierw kliknij Zastosuj."
+
+msgid "Synchronization:"
+msgstr "Synchronizacja:"
+
+msgid "Synchronizing…"
+msgstr "Synchronizowanie…"
+
+msgid "Choose font"
+msgstr "Wybierz czcionkę"
+
+msgid "Synchronization failed."
+msgstr "Synchronizacja nie powiodła się."
+
+msgid "Applications"
+msgstr "Aplikacje"
+
+msgid "Appearance"
+msgstr "Wygląd"
+
+#, kde-format
+msgid "%1 Memory"
+msgstr "Pamięć %1"
+
+#, kde-format
+msgid "%1 is not running"
+msgstr "%1 nie działa"
+
+msgid "HARD not enforced"
+msgstr "HARD niewymuszony"
+
+msgid "HARD unlimited"
+msgstr "HARD bez limitu"
+
+msgid "HARD waiting for RAM to drop"
+msgstr "HARD czeka na spadek użycia RAM"
+
+msgid "without MemoryHigh"
+msgstr "bez MemoryHigh"
+
+msgid "stopped"
+msgstr "zatrzymana"
+
+#, kde-format
+msgid "%1 unit"
+msgid_plural "%1 units"
+msgstr[0] "%1 jednostka"
+msgstr[1] "%1 jednostki"
+msgstr[2] "%1 jednostek"
+
+#, kde-format
+msgid "%1 application found."
+msgid_plural "%1 applications found."
+msgstr[0] "Znaleziono %1 aplikację."
+msgstr[1] "Znaleziono %1 aplikacje."
+msgstr[2] "Znaleziono %1 aplikacji."
+
+#, kde-format
+msgid "%1 unit: %2"
+msgid_plural "%1 units: %2"
+msgstr[0] "%1 jednostka: %2"
+msgstr[1] "%1 jednostki: %2"
+msgstr[2] "%1 jednostek: %2"
+
+#, kde-format
+msgid "Appearance was synchronized to %1 other instance."
+msgid_plural "Appearance was synchronized to %1 other instances."
+msgstr[0] "Wygląd zsynchronizowano z %1 inną instancją."
+msgstr[1] "Wygląd zsynchronizowano z %1 innymi instancjami."
+msgstr[2] "Wygląd zsynchronizowano z %1 innymi instancjami."

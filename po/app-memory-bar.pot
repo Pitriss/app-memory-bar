@@ -1,0 +1,289 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: App Memory Bar\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "no limit"
+msgstr ""
+
+#, kde-format
+msgid "%1 — not currently running"
+msgstr ""
+
+#, kde-format
+msgid "Application binding was updated to %1."
+msgstr ""
+
+msgid "no shared limit"
+msgstr ""
+
+#, kde-format
+msgid "%1 (%2) — not currently running"
+msgstr ""
+
+msgid "No applications were found in the user app.slice."
+msgstr ""
+
+msgid "Applications in this session"
+msgstr ""
+
+msgid "Application:"
+msgstr ""
+
+msgid "Scan again"
+msgstr ""
+
+msgid "Scan"
+msgstr ""
+
+msgid "Executable:"
+msgstr ""
+
+msgid "Systemd units:"
+msgstr ""
+
+msgid "The application is not running."
+msgstr ""
+
+msgid "Processes:"
+msgstr ""
+
+msgid "Could not determine processes."
+msgstr ""
+
+msgid "Backend runs as a systemd --user service. The widget reads the cache by exact executable; a global scan is used only when selecting a new application. A brief detection outage therefore does not immediately make the application disappear."
+msgstr ""
+
+msgid "Total application memory budget"
+msgstr ""
+
+msgid "Soft limit (MemoryHigh):"
+msgstr ""
+
+msgid "Hard limit (MemoryMax):"
+msgstr ""
+
+msgid "Validation:"
+msgstr ""
+
+msgid "Select an application."
+msgstr ""
+
+msgid "Hard limit must be higher than soft limit."
+msgstr ""
+
+#, kde-format
+msgid "The application is currently above the hard limit (%1). The widget applies MemoryHigh and postpones MemoryMax until usage drops."
+msgstr ""
+
+msgid "The budget can be safely applied to all detected units of the application."
+msgstr ""
+
+msgid "Persistence:"
+msgstr ""
+
+msgid "Maintain total limit automatically"
+msgstr ""
+
+msgid "Persistence is maintained by a separate systemd --user service, so it survives a plasmashell restart. The soft limit is distributed across all current systemd units of the application. With a single unit, MemoryMax is also applied; with multiple sibling units, the hard limit safely remains only an overall target."
+msgstr ""
+
+msgid "Actions:"
+msgstr ""
+
+msgid "Apply to entire application"
+msgstr ""
+
+msgid "Clear runtime limits"
+msgstr ""
+
+msgid "Status:"
+msgstr ""
+
+msgid "Applying change…"
+msgstr ""
+
+msgid "Clear runtime limits?"
+msgstr ""
+
+msgid "Sets MemoryHigh and MemoryMax to infinity for all currently detected units of this application. Disable automatic persistence separately, otherwise the widget will reapply the limits on the next poll."
+msgstr ""
+
+msgid "The scan returned no result. Use the Scan button to run it again immediately."
+msgstr ""
+
+#, kde-format
+msgid "Scan failed: %1"
+msgstr ""
+
+msgid "Application runtime limits were cleared."
+msgstr ""
+
+msgid "Soft limit was applied; hard limit is waiting for memory usage to drop."
+msgstr ""
+
+msgid "Soft budget was applied to all units; hard limit is only an overall visual target because the application uses multiple sibling cgroups."
+msgstr ""
+
+msgid "Memory budget was applied to the application."
+msgstr ""
+
+msgid "Failed to change limits."
+msgstr ""
+
+msgid "System font"
+msgstr ""
+
+#, kde-format
+msgid "weight %1"
+msgstr ""
+
+msgid "Geometry"
+msgstr ""
+
+msgid "Background transparency:"
+msgstr ""
+
+msgid "Bar radius:"
+msgstr ""
+
+msgid "Background radius:"
+msgstr ""
+
+msgid "Content padding:"
+msgstr ""
+
+msgid "Font"
+msgstr ""
+
+msgid "Font:"
+msgstr ""
+
+msgid "Choose…"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Use system font"
+msgstr ""
+
+msgid "Preview:"
+msgstr ""
+
+msgid "App RAM  6.4 GiB"
+msgstr ""
+
+msgid "Colors"
+msgstr ""
+
+msgid "Widget background:"
+msgstr ""
+
+msgid "Widget background color"
+msgstr ""
+
+msgid "Use system color"
+msgstr ""
+
+msgid "Bar background:"
+msgstr ""
+
+msgid "Bar background color"
+msgstr ""
+
+msgid "Below soft limit:"
+msgstr ""
+
+msgid "Color below soft limit"
+msgstr ""
+
+msgid "Above soft limit:"
+msgstr ""
+
+msgid "Color above soft limit"
+msgstr ""
+
+msgid "Near hard limit:"
+msgstr ""
+
+msgid "Color near hard limit"
+msgstr ""
+
+msgid "Instance synchronization"
+msgstr ""
+
+msgid "Other widgets:"
+msgstr ""
+
+msgid "Synchronize appearance"
+msgstr ""
+
+msgid "The appearance is copied from the currently applied appearance of this instance. If you changed anything in the configuration, click Apply first."
+msgstr ""
+
+msgid "Synchronization:"
+msgstr ""
+
+msgid "Synchronizing…"
+msgstr ""
+
+msgid "Choose font"
+msgstr ""
+
+msgid "Synchronization failed."
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+#, kde-format
+msgid "%1 Memory"
+msgstr ""
+
+#, kde-format
+msgid "%1 is not running"
+msgstr ""
+
+msgid "HARD not enforced"
+msgstr ""
+
+msgid "HARD unlimited"
+msgstr ""
+
+msgid "HARD waiting for RAM to drop"
+msgstr ""
+
+msgid "without MemoryHigh"
+msgstr ""
+
+msgid "stopped"
+msgstr ""
+
+#, kde-format
+msgid "%1 unit"
+msgid_plural "%1 units"
+msgstr[0] ""
+msgstr[1] ""
+
+#, kde-format
+msgid "%1 application found."
+msgid_plural "%1 applications found."
+msgstr[0] ""
+msgstr[1] ""
+
+#, kde-format
+msgid "%1 unit: %2"
+msgid_plural "%1 units: %2"
+msgstr[0] ""
+msgstr[1] ""
+
+#, kde-format
+msgid "Appearance was synchronized to %1 other instance."
+msgid_plural "Appearance was synchronized to %1 other instances."
+msgstr[0] ""
+msgstr[1] ""

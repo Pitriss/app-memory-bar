@@ -73,6 +73,16 @@ kpackagetool6 -t Plasma/Applet -r cz.chytrex.bravememorybar
 
 The backend application configuration remains in `~/.config/app-memory-bar/` and is reused.
 
+## Translations
+
+User-facing source strings use English as the fallback language. Editable Gettext catalogs live under `po/` for Czech (`cs`), German (`de`), Polish (`pl`), Russian (`ru`), Ukrainian (`uk`) and Slovak (`sk`). The build compiles them into Plasma `.mo` catalogs under `contents/locale/` inside both the `.plasmoid` and Debian package. Ukrainian intentionally uses the standard locale code `uk`, not `ua`.
+
+Validate catalogs manually with:
+
+```bash
+python3 scripts/compile-translations.py --check po
+```
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE).

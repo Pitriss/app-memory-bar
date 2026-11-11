@@ -34,7 +34,7 @@ QQC2.ScrollView {
     }
 
     function formatGiB(value) {
-        if (String(value) === "max") return i18n("bez limitu")
+        if (String(value) === "max") return i18n("no limit")
         const bytes = Number(value)
         if (!isFinite(bytes) || bytes < 0) return "?"
         return (bytes / gib).toFixed(1) + " GiB"
@@ -113,7 +113,7 @@ QQC2.ScrollView {
                 unitCount: 0,
                 units: "",
                 processes: "",
-                text: i18n("%1 — aktuálně neběží", name)
+                text: i18n("%1 — not currently running", name)
             })
             index = appModel.count - 1
         }
@@ -123,7 +123,7 @@ QQC2.ScrollView {
             if (cfg_targetExecutable.length === 0 && item.running && item.exe.length > 0) {
                 cfg_targetExecutable = item.exe
                 cfg_targetDisplayName = item.name
-                actionStatus = i18n("Vazba aplikace byla doplněna na %1.", item.exe)
+                actionStatus = i18n("Application binding was updated to %1.", item.exe)
             }
             loadLimitEditors()
         }
@@ -146,7 +146,7 @@ QQC2.ScrollView {
             const processes = fields.slice(7).join("\t")
             const limitText = finiteLimit(high) && finiteLimit(max)
                 ? "HIGH " + formatGiB(high) + " / MAX " + formatGiB(max)
-                : i18n("bez společného limitu")
+                : i18n("no shared limit")
             const running = unitCount > 0
             appModel.append({
                 name: name,
@@ -160,14 +160,14 @@ QQC2.ScrollView {
                 processes: processes,
                 text: running
                     ? name + " (" + exe.split("/").pop() + ")  —  " + formatGiB(current)
-                        + " · " + limitText + " · " + i18np("%1 jednotka", "%1 jednotky", unitCount)
-                    : i18n("%1 (%2) — aktuálně neběží", name, exe.split("/").pop())
+                        + " · " + limitText + " · " + i18np("%1 unit", "%1 units", unitCount)
+                    : i18n("%1 (%2) — not currently running", name, exe.split("/").pop())
             })
         }
         scanning = false
         scanStatus = appModel.count === 0
-            ? i18n("Nebyla nalezena žádná aplikace v uživatelském app.slice.")
-            : i18np("Nalezena %1 aplikace.", "Nalezeny %1 aplikace.", appModel.count)
+            ? i18n("No applications were found in the user app.slice.")
+            : i18np("%1 application found.", "%1 applications found.", appModel.count)
         ensureCurrentSelection()
     }
 
@@ -214,11 +214,11 @@ QQC2.ScrollView {
 
     QQC2.Label {
         Kirigami.FormData.isSection: true
-        text: i18n("Aplikace v tomto přihlášení")
+        text: i18n("Applications in this session")
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Aplikace:")
+        Kirigami.FormData.label: i18n("Application:")
         Layout.fillWidth: true
         QQC2.ComboBox {
             id: applicationCombo
@@ -230,7 +230,7 @@ QQC2.ScrollView {
         }
         QQC2.Button {
             icon.name: "view-refresh"
-            text: page.scanning ? i18n("Skenovat znovu") : i18n("Skenovat")
+            text: page.scanning ? i18n("Scan again") : i18n("Scan")
             enabled: !page.changingLimits
             onClicked: scanner.refresh()
         }
@@ -252,39 +252,39 @@ QQC2.ScrollView {
     }
 
     QQC2.Label {
-        Kirigami.FormData.label: i18n("Systemd jednotky:")
+        Kirigami.FormData.label: i18n("Systemd units:")
         Layout.fillWidth: true
         wrapMode: Text.WrapAnywhere
         text: {
             const item = page.selectedItem()
-            if (!item || !item.running) return i18n("Aplikace právě neběží.")
-            return i18np("%1 jednotka: %2", "%1 jednotky: %2", item.unitCount, item.units)
+            if (!item || !item.running) return i18n("The application is not running.")
+            return i18np("%1 unit: %2", "%1 units: %2", item.unitCount, item.units)
         }
         font.family: "monospace"
         opacity: 0.82
     }
 
     QQC2.Label {
-        Kirigami.FormData.label: i18n("Procesy:")
+        Kirigami.FormData.label: i18n("Processes:")
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
         text: {
             const item = page.selectedItem()
             if (!item || !item.running) return "—"
-            return item.processes.length > 0 ? item.processes : i18n("Procesy se nepodařilo určit.")
+            return item.processes.length > 0 ? item.processes : i18n("Could not determine processes.")
         }
     }
 
     QQC2.Label {
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: i18n("Backend běží jako systemd --user služba. Widget čte cache podle přesné executable; globální sken se používá jen pro výběr nové aplikace. Krátký výpadek detekce proto nezpůsobí okamžité zmizení aplikace.")
+        text: i18n("Backend runs as a systemd --user service. The widget reads the cache by exact executable; a global scan is used only when selecting a new application. A brief detection outage therefore does not immediately make the application disappear.")
         opacity: 0.76
     }
 
     QQC2.Label {
         Kirigami.FormData.isSection: true
-        text: i18n("Celkový paměťový budget aplikace")
+        text: i18n("Total application memory budget")
     }
 
     QQC2.SpinBox {
@@ -320,7 +320,7 @@ QQC2.ScrollView {
     }
 
     QQC2.Label {
-        Kirigami.FormData.label: i18n("Kontrola:")
+        Kirigami.FormData.label: i18n("Validation:")
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
         color: {
@@ -332,16 +332,16 @@ QQC2.ScrollView {
         }
         text: {
             const item = page.selectedItem()
-            if (!item) return i18n("Vyber aplikaci.")
-            if (page.requestedMaxBytes() <= page.requestedHighBytes()) return i18n("Hard limit musí být vyšší než soft limit.")
-            if (item.running && Number(item.current) >= page.requestedMaxBytes()) return i18n("Aplikace je nyní nad hard limitem (%1). Widget aplikuje MemoryHigh a MemoryMax odloží, dokud spotřeba neklesne.", page.formatGiB(item.current))
-            return i18n("Budget lze bezpečně aplikovat na všechny nalezené jednotky aplikace.")
+            if (!item) return i18n("Select an application.")
+            if (page.requestedMaxBytes() <= page.requestedHighBytes()) return i18n("Hard limit must be higher than soft limit.")
+            if (item.running && Number(item.current) >= page.requestedMaxBytes()) return i18n("The application is currently above the hard limit (%1). The widget applies MemoryHigh and postpones MemoryMax until usage drops.", page.formatGiB(item.current))
+            return i18n("The budget can be safely applied to all detected units of the application.")
         }
     }
 
     QQC2.CheckBox {
         Kirigami.FormData.label: i18n("Persistence:")
-        text: i18n("Udržovat celkový limit automaticky")
+        text: i18n("Maintain total limit automatically")
         checked: page.cfg_maintainLimitsByExecutable
         enabled: page.selectedItem() !== null && page.limitsValidForApply() && !page.changingLimits
         onToggled: {
@@ -356,17 +356,17 @@ QQC2.ScrollView {
     QQC2.Label {
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: i18n("Persistence je nyní udržována samostatnou systemd --user službou, takže přežije restart plasmashellu. Soft limit se rozdělí mezi všechny aktuální systemd jednotky aplikace. U jediné jednotky se aplikuje i MemoryMax; u více sourozeneckých jednotek zůstává hard limit bezpečně jen celkovým targetem.")
+        text: i18n("Persistence is maintained by a separate systemd --user service, so it survives a plasmashell restart. The soft limit is distributed across all current systemd units of the application. With a single unit, MemoryMax is also applied; with multiple sibling units, the hard limit safely remains only an overall target.")
         opacity: 0.76
     }
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Akce:")
+        Kirigami.FormData.label: i18n("Actions:")
         Layout.fillWidth: true
         QQC2.Button {
             Layout.fillWidth: true
             icon.name: "media-playback-start"
-            text: i18n("Aplikovat na celou aplikaci")
+            text: i18n("Apply to entire application")
             enabled: {
                 const item = page.selectedItem()
                 return item && item.running && item.exe.length > 0 && !page.scanning && !page.changingLimits && page.limitsValidForApply()
@@ -376,7 +376,7 @@ QQC2.ScrollView {
         QQC2.Button {
             Layout.fillWidth: true
             icon.name: "edit-clear"
-            text: i18n("Uvolnit runtime limity")
+            text: i18n("Clear runtime limits")
             enabled: {
                 const item = page.selectedItem()
                 return item && item.running && item.exe.length > 0 && !page.scanning && !page.changingLimits
@@ -386,10 +386,10 @@ QQC2.ScrollView {
     }
 
     QQC2.Label {
-        Kirigami.FormData.label: i18n("Stav:")
+        Kirigami.FormData.label: i18n("Status:")
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: page.changingLimits ? i18n("Provádím změnu…") : (page.actionStatus.length > 0 ? page.actionStatus : page.scanStatus)
+        text: page.changingLimits ? i18n("Applying change…") : (page.actionStatus.length > 0 ? page.actionStatus : page.scanStatus)
         opacity: 0.82
     }
 
@@ -398,12 +398,12 @@ QQC2.ScrollView {
     QQC2.Dialog {
         id: clearDialog
         modal: true
-        title: i18n("Uvolnit runtime limity?")
+        title: i18n("Clear runtime limits?")
         standardButtons: QQC2.Dialog.Ok | QQC2.Dialog.Cancel
         contentItem: QQC2.Label {
             width: Math.min(Kirigami.Units.gridUnit * 30, implicitWidth)
             wrapMode: Text.WordWrap
-            text: i18n("Nastaví MemoryHigh a MemoryMax na infinity u všech právě nalezených jednotek této aplikace. Automatickou persistenci vypni zvlášť, jinak widget limity při dalším pollu znovu nastaví.")
+            text: i18n("Sets MemoryHigh and MemoryMax to infinity for all currently detected units of this application. Disable automatic persistence separately, otherwise the widget will reapply the limits on the next poll.")
         }
         onAccepted: page.clearRuntime()
     }
@@ -417,7 +417,7 @@ QQC2.ScrollView {
             if (page.activeScanCommand.length > 0 && scanner.connectedSources.indexOf(page.activeScanCommand) !== -1)
                 scanner.disconnectSource(page.activeScanCommand)
             page.scanning = false
-            page.scanStatus = i18n("Sken nevrátil výsledek. Tlačítkem Skenovat jej můžeš okamžitě spustit znovu.")
+            page.scanStatus = i18n("The scan returned no result. Use the Scan button to run it again immediately.")
         }
     }
 
@@ -433,7 +433,7 @@ QQC2.ScrollView {
             const stderr = String(data["stderr"] || "").trim()
             page.parseScan(stdout)
             if (appModel.count === 0 && stderr.length > 0)
-                page.scanStatus = i18n("Sken selhal: %1", stderr)
+                page.scanStatus = i18n("Scan failed: %1", stderr)
         }
         function refresh() {
             if (page.activeScanCommand.length > 0 && connectedSources.indexOf(page.activeScanCommand) !== -1)
@@ -459,14 +459,14 @@ QQC2.ScrollView {
             page.changingLimits = false
             if (stdout.indexOf("OK\t") === 0) {
                 page.actionStatus = stdout.indexOf("OK\tcleared") === 0
-                    ? i18n("Runtime limity aplikace byly uvolněny.")
+                    ? i18n("Application runtime limits were cleared.")
                     : (stdout.indexOf("pending-max") >= 0
-                        ? i18n("Soft limit byl aplikován; hard limit čeká na pokles spotřeby.")
+                        ? i18n("Soft limit was applied; hard limit is waiting for memory usage to drop.")
                         : (stdout.indexOf("soft-only-multi") >= 0
-                            ? i18n("Soft budget byl aplikován na všechny jednotky; hard limit je pouze celkový vizuální target, protože aplikace používá více sourozeneckých cgroups.")
-                            : i18n("Paměťový budget byl aplikován na aplikaci.")))
+                            ? i18n("Soft budget was applied to all units; hard limit is only an overall visual target because the application uses multiple sibling cgroups.")
+                            : i18n("Memory budget was applied to the application.")))
             } else {
-                page.actionStatus = stderr.length > 0 ? stderr : (stdout.length > 0 ? stdout : i18n("Změna limitů selhala."))
+                page.actionStatus = stderr.length > 0 ? stderr : (stdout.length > 0 ? stdout : i18n("Failed to change limits."))
             }
             scanner.refresh()
         }

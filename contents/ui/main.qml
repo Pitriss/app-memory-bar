@@ -171,19 +171,19 @@ PlasmoidItem {
         limitsValid = isFinite(currentBytes) && isFinite(highBytes) && highBytes > 0
     }
 
-    toolTipMainText: applicationName + " Memory"
+    toolTipMainText: i18n("%1 Memory", applicationName)
     toolTipSubText: !appRunning
-        ? applicationName + " neběží"
+        ? i18n("%1 is not running", applicationName)
         : limitsValid
             ? formatGiB(currentBytes) + " / HIGH " + formatGiB(highBytes)
                 + (hardLimitValid
                     ? " / MAX " + formatGiB(maxBytes)
                     : visualTargetValid
-                        ? " / TARGET " + formatGiB(desiredMaxBytes) + " (HARD nevynucen)"
-                        : " / HARD bez limitu")
-                + " / " + runtimeUnitCount + (runtimeUnitCount === 1 ? " unit" : " units")
-                + (enforcementState === "pending-max" ? " / HARD čeká na pokles RAM" : "")
-            : formatGiB(currentBytes) + " / bez MemoryHigh / " + runtimeUnitCount + (runtimeUnitCount === 1 ? " unit" : " units")
+                        ? " / TARGET " + formatGiB(desiredMaxBytes) + " (" + i18n("HARD not enforced") + ")"
+                        : " / " + i18n("HARD unlimited"))
+                + " / " + i18np("%1 unit", "%1 units", runtimeUnitCount)
+                + (enforcementState === "pending-max" ? " / " + i18n("HARD waiting for RAM to drop") : "")
+            : formatGiB(currentBytes) + " / " + i18n("without MemoryHigh") + " / " + i18np("%1 unit", "%1 units", runtimeUnitCount)
 
     Plasma5Support.DataSource {
         id: probe
@@ -251,7 +251,7 @@ PlasmoidItem {
 
                     PlasmaComponents.Label {
                         text: !root.appRunning
-                            ? "stopped"
+                            ? i18n("stopped")
                             : root.limitsValid
                                 ? root.formatGiB(root.currentBytes)
                                 : root.formatGiB(root.currentBytes)
@@ -326,14 +326,14 @@ PlasmoidItem {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         text: !root.appRunning
-                            ? root.applicationName + " neběží"
+                            ? i18n("%1 is not running", root.applicationName)
                             : root.limitsValid
                                 ? root.hardLimitValid
                                     ? "MAX " + root.formatGiB(root.maxBytes)
                                     : root.visualTargetValid
-                                        ? "TARGET " + root.formatGiB(root.desiredMaxBytes) + " · " + root.runtimeUnitCount + "× unit"
-                                        : "HARD bez limitu · " + root.runtimeUnitCount + "× unit"
-                                : "bez MemoryHigh · " + root.runtimeUnitCount + "× unit"
+                                        ? "TARGET " + root.formatGiB(root.desiredMaxBytes) + " · " + i18np("%1 unit", "%1 units", root.runtimeUnitCount)
+                                        : i18n("HARD unlimited") + " · " + i18np("%1 unit", "%1 units", root.runtimeUnitCount)
+                                : i18n("without MemoryHigh") + " · " + i18np("%1 unit", "%1 units", root.runtimeUnitCount)
                         color: root.appRunning && !root.limitsValid ? Kirigami.Theme.disabledTextColor : Kirigami.Theme.disabledTextColor
                         font.family: root.configuredFontFamily
                         font.pointSize: root.smallFontPointSize

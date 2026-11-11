@@ -1,0 +1,296 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: App Memory Bar\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"Language-Team: Ukrainian\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11)?0:((n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20))?1:2);\n"
+
+msgid "no limit"
+msgstr "без ліміту"
+
+#, kde-format
+msgid "%1 — not currently running"
+msgstr "%1 — зараз не запущено"
+
+#, kde-format
+msgid "Application binding was updated to %1."
+msgstr "Прив’язку застосунку оновлено на %1."
+
+msgid "no shared limit"
+msgstr "без спільного ліміту"
+
+#, kde-format
+msgid "%1 (%2) — not currently running"
+msgstr "%1 (%2) — зараз не запущено"
+
+msgid "No applications were found in the user app.slice."
+msgstr "У користувацькому app.slice застосунків не знайдено."
+
+msgid "Applications in this session"
+msgstr "Застосунки в цьому сеансі"
+
+msgid "Application:"
+msgstr "Застосунок:"
+
+msgid "Scan again"
+msgstr "Сканувати знову"
+
+msgid "Scan"
+msgstr "Сканувати"
+
+msgid "Executable:"
+msgstr "Виконуваний файл:"
+
+msgid "Systemd units:"
+msgstr "Юніти systemd:"
+
+msgid "The application is not running."
+msgstr "Застосунок зараз не запущено."
+
+msgid "Processes:"
+msgstr "Процеси:"
+
+msgid "Could not determine processes."
+msgstr "Не вдалося визначити процеси."
+
+msgid "Backend runs as a systemd --user service. The widget reads the cache by exact executable; a global scan is used only when selecting a new application. A brief detection outage therefore does not immediately make the application disappear."
+msgstr "Бекенд працює як служба systemd --user. Віджет читає кеш за точним виконуваним файлом; глобальне сканування використовується лише під час вибору нового застосунку. Тому короткий збій виявлення не призводить до негайного зникнення застосунку."
+
+msgid "Total application memory budget"
+msgstr "Загальний бюджет пам’яті застосунку"
+
+msgid "Soft limit (MemoryHigh):"
+msgstr "М’який ліміт (MemoryHigh):"
+
+msgid "Hard limit (MemoryMax):"
+msgstr "Жорсткий ліміт (MemoryMax):"
+
+msgid "Validation:"
+msgstr "Перевірка:"
+
+msgid "Select an application."
+msgstr "Виберіть застосунок."
+
+msgid "Hard limit must be higher than soft limit."
+msgstr "Жорсткий ліміт має бути вищим за м’який ліміт."
+
+#, kde-format
+msgid "The application is currently above the hard limit (%1). The widget applies MemoryHigh and postpones MemoryMax until usage drops."
+msgstr "Застосунок зараз перевищує жорсткий ліміт (%1). Віджет застосовує MemoryHigh і відкладає MemoryMax, доки споживання не зменшиться."
+
+msgid "The budget can be safely applied to all detected units of the application."
+msgstr "Бюджет можна безпечно застосувати до всіх виявлених юнітів застосунку."
+
+msgid "Persistence:"
+msgstr "Постійність:"
+
+msgid "Maintain total limit automatically"
+msgstr "Автоматично підтримувати загальний ліміт"
+
+msgid "Persistence is maintained by a separate systemd --user service, so it survives a plasmashell restart. The soft limit is distributed across all current systemd units of the application. With a single unit, MemoryMax is also applied; with multiple sibling units, the hard limit safely remains only an overall target."
+msgstr "Постійність підтримується окремою службою systemd --user, тому переживає перезапуск plasmashell. М’який ліміт розподіляється між усіма поточними юнітами systemd застосунку. Для одного юніта застосовується і MemoryMax; за кількох сусідніх юнітів жорсткий ліміт безпечно лишається лише загальною ціллю."
+
+msgid "Actions:"
+msgstr "Дії:"
+
+msgid "Apply to entire application"
+msgstr "Застосувати до всього застосунку"
+
+msgid "Clear runtime limits"
+msgstr "Скинути runtime-ліміти"
+
+msgid "Status:"
+msgstr "Stav:"
+
+msgid "Applying change…"
+msgstr "Застосування зміни…"
+
+msgid "Clear runtime limits?"
+msgstr "Скинути runtime-ліміти?"
+
+msgid "Sets MemoryHigh and MemoryMax to infinity for all currently detected units of this application. Disable automatic persistence separately, otherwise the widget will reapply the limits on the next poll."
+msgstr "Встановлює MemoryHigh і MemoryMax у нескінченність для всіх виявлених зараз юнітів цього застосунку. Окремо вимкніть автоматичну постійність, інакше віджет знову встановить ліміти під час наступного опитування."
+
+msgid "The scan returned no result. Use the Scan button to run it again immediately."
+msgstr "Сканування не повернуло результату. Скористайтеся кнопкою «Сканувати», щоб одразу запустити його знову."
+
+#, kde-format
+msgid "Scan failed: %1"
+msgstr "Сканування не вдалося: %1"
+
+msgid "Application runtime limits were cleared."
+msgstr "Runtime-ліміти застосунку скинуто."
+
+msgid "Soft limit was applied; hard limit is waiting for memory usage to drop."
+msgstr "М’який ліміт застосовано; жорсткий ліміт очікує зменшення споживання пам’яті."
+
+msgid "Soft budget was applied to all units; hard limit is only an overall visual target because the application uses multiple sibling cgroups."
+msgstr "М’який бюджет застосовано до всіх юнітів; жорсткий ліміт є лише загальною візуальною ціллю, оскільки застосунок використовує кілька сусідніх cgroups."
+
+msgid "Memory budget was applied to the application."
+msgstr "Бюджет пам’яті застосовано до застосунку."
+
+msgid "Failed to change limits."
+msgstr "Не вдалося змінити ліміти."
+
+msgid "System font"
+msgstr "Системний шрифт"
+
+#, kde-format
+msgid "weight %1"
+msgstr "насиченість %1"
+
+msgid "Geometry"
+msgstr "Геометрія"
+
+msgid "Background transparency:"
+msgstr "Прозорість тла:"
+
+msgid "Bar radius:"
+msgstr "Радіус смуги:"
+
+msgid "Background radius:"
+msgstr "Радіус тла:"
+
+msgid "Content padding:"
+msgstr "Відступ вмісту:"
+
+msgid "Font"
+msgstr "Шрифт"
+
+msgid "Font:"
+msgstr "Шрифт:"
+
+msgid "Choose…"
+msgstr "Вибрати…"
+
+msgid "System"
+msgstr "Системний"
+
+msgid "Use system font"
+msgstr "Використовувати системний шрифт"
+
+msgid "Preview:"
+msgstr "Попередній перегляд:"
+
+msgid "App RAM  6.4 GiB"
+msgstr "App RAM  6.4 GiB"
+
+msgid "Colors"
+msgstr "Кольори"
+
+msgid "Widget background:"
+msgstr "Тло віджета:"
+
+msgid "Widget background color"
+msgstr "Колір тла віджета"
+
+msgid "Use system color"
+msgstr "Використовувати системний колір"
+
+msgid "Bar background:"
+msgstr "Тло смуги:"
+
+msgid "Bar background color"
+msgstr "Колір тла смуги"
+
+msgid "Below soft limit:"
+msgstr "Нижче м’якого ліміту:"
+
+msgid "Color below soft limit"
+msgstr "Колір нижче м’якого ліміту"
+
+msgid "Above soft limit:"
+msgstr "Вище м’якого ліміту:"
+
+msgid "Color above soft limit"
+msgstr "Колір вище м’якого ліміту"
+
+msgid "Near hard limit:"
+msgstr "Близько до жорсткого ліміту:"
+
+msgid "Color near hard limit"
+msgstr "Колір біля жорсткого ліміту"
+
+msgid "Instance synchronization"
+msgstr "Синхронізація екземплярів"
+
+msgid "Other widgets:"
+msgstr "Інші віджети:"
+
+msgid "Synchronize appearance"
+msgstr "Синхронізувати вигляд"
+
+msgid "The appearance is copied from the currently applied appearance of this instance. If you changed anything in the configuration, click Apply first."
+msgstr "Вигляд копіюється з поточного застосованого вигляду цього екземпляра. Якщо ви щось змінили в налаштуваннях, спочатку натисніть «Застосувати»."
+
+msgid "Synchronization:"
+msgstr "Синхронізація:"
+
+msgid "Synchronizing…"
+msgstr "Синхронізація…"
+
+msgid "Choose font"
+msgstr "Вибрати шрифт"
+
+msgid "Synchronization failed."
+msgstr "Синхронізація не вдалася."
+
+msgid "Applications"
+msgstr "Застосунки"
+
+msgid "Appearance"
+msgstr "Вигляд"
+
+#, kde-format
+msgid "%1 Memory"
+msgstr "Пам’ять %1"
+
+#, kde-format
+msgid "%1 is not running"
+msgstr "%1 не запущено"
+
+msgid "HARD not enforced"
+msgstr "HARD не застосовується"
+
+msgid "HARD unlimited"
+msgstr "HARD без ліміту"
+
+msgid "HARD waiting for RAM to drop"
+msgstr "HARD очікує зменшення використання RAM"
+
+msgid "without MemoryHigh"
+msgstr "без MemoryHigh"
+
+msgid "stopped"
+msgstr "зупинено"
+
+#, kde-format
+msgid "%1 unit"
+msgid_plural "%1 units"
+msgstr[0] "%1 юніт"
+msgstr[1] "%1 юніти"
+msgstr[2] "%1 юнітів"
+
+#, kde-format
+msgid "%1 application found."
+msgid_plural "%1 applications found."
+msgstr[0] "Знайдено %1 застосунок."
+msgstr[1] "Знайдено %1 застосунки."
+msgstr[2] "Знайдено %1 застосунків."
+
+#, kde-format
+msgid "%1 unit: %2"
+msgid_plural "%1 units: %2"
+msgstr[0] "%1 юніт: %2"
+msgstr[1] "%1 юніти: %2"
+msgstr[2] "%1 юнітів: %2"
+
+#, kde-format
+msgid "Appearance was synchronized to %1 other instance."
+msgid_plural "Appearance was synchronized to %1 other instances."
+msgstr[0] "Вигляд синхронізовано ще з %1 екземпляром."
+msgstr[1] "Вигляд синхронізовано ще з %1 екземплярами."
+msgstr[2] "Вигляд синхронізовано ще з %1 екземплярами."

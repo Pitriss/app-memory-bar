@@ -20,6 +20,11 @@ for req in metadata.json LICENSE README.md contents/ui/main.qml contents/config/
     [ -e "$TMP/pkg/$req" ] || { printf 'ERROR: package missing %s\n' "$req" >&2; exit 1; }
 done
 
+for locale in cs de pl ru uk sk; do
+    req="contents/locale/$locale/LC_MESSAGES/plasma_applet_cz.pitriss.appmemorybar.mo"
+    [ -s "$TMP/pkg/$req" ] || { printf 'ERROR: package missing translation %s\n' "$req" >&2; exit 1; }
+done
+
 python3 - "$ROOT/metadata.json" "$TMP/pkg/metadata.json" "$(basename "$FILE")" <<'PY'
 import json, pathlib, re, sys
 src = json.load(open(sys.argv[1], encoding="utf-8"))

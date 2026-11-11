@@ -1,0 +1,296 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: App Memory Bar\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk\n"
+"Language-Team: Slovak\n"
+"Plural-Forms: nplurals=3; plural=(n==1)?0:(n>=2 && n<=4)?1:2;\n"
+
+msgid "no limit"
+msgstr "bez limitu"
+
+#, kde-format
+msgid "%1 — not currently running"
+msgstr "%1 — momentálne nebeží"
+
+#, kde-format
+msgid "Application binding was updated to %1."
+msgstr "Väzba aplikácie bola aktualizovaná na %1."
+
+msgid "no shared limit"
+msgstr "bez spoločného limitu"
+
+#, kde-format
+msgid "%1 (%2) — not currently running"
+msgstr "%1 (%2) — momentálne nebeží"
+
+msgid "No applications were found in the user app.slice."
+msgstr "V používateľskom app.slice sa nenašli žiadne aplikácie."
+
+msgid "Applications in this session"
+msgstr "Aplikácie v tejto relácii"
+
+msgid "Application:"
+msgstr "Aplikácia:"
+
+msgid "Scan again"
+msgstr "Skenovať znova"
+
+msgid "Scan"
+msgstr "Skenovať"
+
+msgid "Executable:"
+msgstr "Spustiteľný súbor:"
+
+msgid "Systemd units:"
+msgstr "Jednotky systemd:"
+
+msgid "The application is not running."
+msgstr "Aplikácia momentálne nebeží."
+
+msgid "Processes:"
+msgstr "Procesy:"
+
+msgid "Could not determine processes."
+msgstr "Procesy sa nepodarilo určiť."
+
+msgid "Backend runs as a systemd --user service. The widget reads the cache by exact executable; a global scan is used only when selecting a new application. A brief detection outage therefore does not immediately make the application disappear."
+msgstr "Backend beží ako služba systemd --user. Widget číta cache podľa presného spustiteľného súboru; globálne skenovanie sa používa iba pri výbere novej aplikácie. Krátky výpadok detekcie preto nespôsobí okamžité zmiznutie aplikácie."
+
+msgid "Total application memory budget"
+msgstr "Celkový pamäťový rozpočet aplikácie"
+
+msgid "Soft limit (MemoryHigh):"
+msgstr "Mäkký limit (MemoryHigh):"
+
+msgid "Hard limit (MemoryMax):"
+msgstr "Tvrdý limit (MemoryMax):"
+
+msgid "Validation:"
+msgstr "Kontrola:"
+
+msgid "Select an application."
+msgstr "Vyber aplikáciu."
+
+msgid "Hard limit must be higher than soft limit."
+msgstr "Tvrdý limit musí byť vyšší ako mäkký limit."
+
+#, kde-format
+msgid "The application is currently above the hard limit (%1). The widget applies MemoryHigh and postpones MemoryMax until usage drops."
+msgstr "Aplikácia je momentálne nad tvrdým limitom (%1). Widget použije MemoryHigh a MemoryMax odloží, kým spotreba neklesne."
+
+msgid "The budget can be safely applied to all detected units of the application."
+msgstr "Rozpočet možno bezpečne použiť na všetky nájdené jednotky aplikácie."
+
+msgid "Persistence:"
+msgstr "Perzistencia:"
+
+msgid "Maintain total limit automatically"
+msgstr "Automaticky udržiavať celkový limit"
+
+msgid "Persistence is maintained by a separate systemd --user service, so it survives a plasmashell restart. The soft limit is distributed across all current systemd units of the application. With a single unit, MemoryMax is also applied; with multiple sibling units, the hard limit safely remains only an overall target."
+msgstr "Perzistenciu udržiava samostatná služba systemd --user, takže prežije reštart plasmashellu. Mäkký limit sa rozdelí medzi všetky aktuálne jednotky systemd aplikácie. Pri jednej jednotke sa použije aj MemoryMax; pri viacerých súrodeneckých jednotkách zostáva tvrdý limit bezpečne iba celkovým cieľom."
+
+msgid "Actions:"
+msgstr "Akcie:"
+
+msgid "Apply to entire application"
+msgstr "Použiť na celú aplikáciu"
+
+msgid "Clear runtime limits"
+msgstr "Uvoľniť runtime limity"
+
+msgid "Status:"
+msgstr "Stav:"
+
+msgid "Applying change…"
+msgstr "Vykonáva sa zmena…"
+
+msgid "Clear runtime limits?"
+msgstr "Uvoľniť runtime limity?"
+
+msgid "Sets MemoryHigh and MemoryMax to infinity for all currently detected units of this application. Disable automatic persistence separately, otherwise the widget will reapply the limits on the next poll."
+msgstr "Nastaví MemoryHigh a MemoryMax na nekonečno pre všetky aktuálne nájdené jednotky tejto aplikácie. Automatickú perzistenciu vypni samostatne, inak widget limity pri ďalšom pollingu znovu nastaví."
+
+msgid "The scan returned no result. Use the Scan button to run it again immediately."
+msgstr "Skenovanie nevrátilo výsledok. Tlačidlom Skenovať ho môžeš okamžite spustiť znova."
+
+#, kde-format
+msgid "Scan failed: %1"
+msgstr "Skenovanie zlyhalo: %1"
+
+msgid "Application runtime limits were cleared."
+msgstr "Runtime limity aplikácie boli uvoľnené."
+
+msgid "Soft limit was applied; hard limit is waiting for memory usage to drop."
+msgstr "Mäkký limit bol použitý; tvrdý limit čaká na pokles spotreby pamäte."
+
+msgid "Soft budget was applied to all units; hard limit is only an overall visual target because the application uses multiple sibling cgroups."
+msgstr "Mäkký rozpočet bol použitý na všetky jednotky; tvrdý limit je iba celkový vizuálny cieľ, pretože aplikácia používa viac súrodeneckých cgroups."
+
+msgid "Memory budget was applied to the application."
+msgstr "Pamäťový rozpočet bol použitý na aplikáciu."
+
+msgid "Failed to change limits."
+msgstr "Zmena limitov zlyhala."
+
+msgid "System font"
+msgstr "Systémové písmo"
+
+#, kde-format
+msgid "weight %1"
+msgstr "hrúbka %1"
+
+msgid "Geometry"
+msgstr "Geometria"
+
+msgid "Background transparency:"
+msgstr "Priehľadnosť pozadia:"
+
+msgid "Bar radius:"
+msgstr "Polomer lišty:"
+
+msgid "Background radius:"
+msgstr "Polomer pozadia:"
+
+msgid "Content padding:"
+msgstr "Odsadenie obsahu:"
+
+msgid "Font"
+msgstr "Písmo"
+
+msgid "Font:"
+msgstr "Písmo:"
+
+msgid "Choose…"
+msgstr "Vybrať…"
+
+msgid "System"
+msgstr "Systémové"
+
+msgid "Use system font"
+msgstr "Použiť systémové písmo"
+
+msgid "Preview:"
+msgstr "Náhľad:"
+
+msgid "App RAM  6.4 GiB"
+msgstr "App RAM  6.4 GiB"
+
+msgid "Colors"
+msgstr "Farby"
+
+msgid "Widget background:"
+msgstr "Pozadie widgetu:"
+
+msgid "Widget background color"
+msgstr "Farba pozadia widgetu"
+
+msgid "Use system color"
+msgstr "Použiť systémovú farbu"
+
+msgid "Bar background:"
+msgstr "Pozadie lišty:"
+
+msgid "Bar background color"
+msgstr "Farba pozadia lišty"
+
+msgid "Below soft limit:"
+msgstr "Pod mäkkým limitom:"
+
+msgid "Color below soft limit"
+msgstr "Farba pod mäkkým limitom"
+
+msgid "Above soft limit:"
+msgstr "Nad mäkkým limitom:"
+
+msgid "Color above soft limit"
+msgstr "Farba nad mäkkým limitom"
+
+msgid "Near hard limit:"
+msgstr "Blízko tvrdého limitu:"
+
+msgid "Color near hard limit"
+msgstr "Farba blízko tvrdého limitu"
+
+msgid "Instance synchronization"
+msgstr "Synchronizácia inštancií"
+
+msgid "Other widgets:"
+msgstr "Ostatné widgety:"
+
+msgid "Synchronize appearance"
+msgstr "Synchronizovať vzhľad"
+
+msgid "The appearance is copied from the currently applied appearance of this instance. If you changed anything in the configuration, click Apply first."
+msgstr "Vzhľad sa kopíruje z aktuálne použitého vzhľadu tejto inštancie. Ak si niečo zmenil v konfigurácii, najprv klikni na Použiť."
+
+msgid "Synchronization:"
+msgstr "Synchronizácia:"
+
+msgid "Synchronizing…"
+msgstr "Synchronizuje sa…"
+
+msgid "Choose font"
+msgstr "Vybrať písmo"
+
+msgid "Synchronization failed."
+msgstr "Synchronizácia zlyhala."
+
+msgid "Applications"
+msgstr "Aplikácie"
+
+msgid "Appearance"
+msgstr "Vzhľad"
+
+#, kde-format
+msgid "%1 Memory"
+msgstr "Pamäť %1"
+
+#, kde-format
+msgid "%1 is not running"
+msgstr "%1 nebeží"
+
+msgid "HARD not enforced"
+msgstr "HARD nevynucovaný"
+
+msgid "HARD unlimited"
+msgstr "HARD bez limitu"
+
+msgid "HARD waiting for RAM to drop"
+msgstr "HARD čaká na pokles využitia RAM"
+
+msgid "without MemoryHigh"
+msgstr "bez MemoryHigh"
+
+msgid "stopped"
+msgstr "zastavené"
+
+#, kde-format
+msgid "%1 unit"
+msgid_plural "%1 units"
+msgstr[0] "%1 jednotka"
+msgstr[1] "%1 jednotky"
+msgstr[2] "%1 jednotiek"
+
+#, kde-format
+msgid "%1 application found."
+msgid_plural "%1 applications found."
+msgstr[0] "Nájdená %1 aplikácia."
+msgstr[1] "Nájdené %1 aplikácie."
+msgstr[2] "Nájdených %1 aplikácií."
+
+#, kde-format
+msgid "%1 unit: %2"
+msgid_plural "%1 units: %2"
+msgstr[0] "%1 jednotka: %2"
+msgstr[1] "%1 jednotky: %2"
+msgstr[2] "%1 jednotiek: %2"
+
+#, kde-format
+msgid "Appearance was synchronized to %1 other instance."
+msgid_plural "Appearance was synchronized to %1 other instances."
+msgstr[0] "Vzhľad bol synchronizovaný s %1 ďalšou inštanciou."
+msgstr[1] "Vzhľad bol synchronizovaný s %1 ďalšími inštanciami."
+msgstr[2] "Vzhľad bol synchronizovaný s %1 ďalšími inštanciami."
